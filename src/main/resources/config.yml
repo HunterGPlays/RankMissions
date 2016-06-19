@@ -1,0 +1,95 @@
+# RankMissions by Terrobility
+# Skype: huntergplays and Spigot: Terrobility <3
+
+# x=x=x=x=x=x=x=x=x
+# | CONFIGURATION |
+# x=x=x=x=x=x=x=x=x
+# Please don't change the config version.
+config-version: 1
+
+# To store all completed missions per player.
+database:
+    # Either 'mysql' or 'sqlite'.
+    type: sqlite
+    mysql:
+        host: localhost
+        port: 3306
+        database-name: rankmissions
+        user: root
+        password: password
+
+plugin-messages:
+    no-permission:
+    - "&cYou don't have permission."
+    invalid-args:
+    - "&cInvalid arguments!"
+    help-menu:
+    - "&8 ---- &bCommands for RankMissions &8-- &7Page &d1 &8----"
+    - "&6/rankmissions&f: &7Open this help menu."
+    - "&6/rankmissions &estats [player]&f: &7See what missions a player has completed."
+    - "&6/rankmissions &cgive [player] [mission]&f: &7Give a player a mission."
+    - "&6/rankmissions &cgiveall [mission]&f: &7Give all online players missions."
+    given-item:
+    - "&aYou were given the item to spawn &2%mission%&a!"
+    no-space:
+    - "&cThere was no space in your inventory so the item was dropped where you're standing!"
+    required-missions-not-completed:
+    - "&cYou cannot activate this mission because you have not completed the required missions!"
+    completed-mission-that-blacklists:
+    - "&cYou can't complete this mission because you have completed another mission that disallows you from doing this one!"
+    no-repeat:
+    - "&cYou're not allowed to repeat this mission!"
+    already-completing-mission:
+    - "&cYou are already completing a mission!"
+    failed-to-spawn-entity:
+    - "&cYou can't spawn the entity here!"
+    died-by-natural-causes:
+    - "&cThe mob for the %mission% mission started by %player% died by natural causes! Better luck next time."
+    not-in-region:
+    - "&cYou can only start this mission in a warzone!"
+
+
+missions:
+    # This is the mission name. You can add as many missions as you want.
+    'ExampleMission2':
+        item:
+            # Materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+            type: "HAY_BLOCK"
+            data: 0
+            name: "&eRank Mission"
+            lore:
+            - "&7Right click me to"
+            - "&7start a rank mission!"
+            # Change to "activate-in-region: []" to disable.
+            activate-in-region:
+            - "warzone"
+        settings:
+            start-delay: 10
+            # If true, it would require 'rankmissions.examplemission2' since that's the name you chose for the mission.
+            use-permission: false
+            repeatable: false
+            # Change to "required-missions: []" to disable.
+            required-missions:
+            - "examplemission1"
+            # Change to "blacklisted-if-mission-complete: []" to disable.
+            blacklisted-if-mission-complete:
+            - "examplemission3"
+        entity:
+            # Entity types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
+            mob: "COW"
+            name: "&e%player%'s Rank Mission Cow"
+            health: 200.0
+            # Follows format of EFFECT:LEVEL. The time will always be infinite.
+            # Effect list: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+            effects:
+            - "SPEED:10"
+        # Commands to be run.
+        actions:
+            on-click:
+            - "broadcast %player% is about to start a %mission% mission at %x%, %y%, %z%!"
+            on-start:
+            - "broadcast %player% started a %mission% mission at %x%, %y%, %z%!"
+            on-complete:
+            - "broadcast %killer% has completed %player%'s mission!"
+            - "zperms player %killer% addgroup example"
+            - "msg %killer% Congratulations on winning the rank mission! Your rank has been applied."

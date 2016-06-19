@@ -1,0 +1,15 @@
+name: ${project.artifactId}
+main: net.terrocidepvp.rankmissions.RankMissions
+version: ${project.version}
+softdepend: [WorldEdit, WorldGuard]
+author: Terrobility
+description: ${project.description}
+website: https://terrocidepvp.net/
+commands:
+    rankmissions:
+        aliases: [missions]
+        description: "View the RankMissions help menu."
+permissions:
+    rankmissions.admin:
+        description: "Allows you to give other people rank missions."
+        default: op
