@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.terrocidepvp</groupId>
     <artifactId>RankMissions</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>Give players access to random rewards!</description>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

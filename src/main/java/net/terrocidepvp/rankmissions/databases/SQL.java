@@ -123,10 +123,10 @@ public abstract class SQL {
     }
 
     private void updateTables() {
-        query("CREATE TABLE IF NOT EXISTS rankmissions (uuid char(36) NOT NULL, completedMissions varchar NOT NULL, PRIMARY KEY (uuid))", false);
-        query("CREATE TABLE IF NOT EXISTS rankmissions_queued (uuid char(36) NOT NULL, queuedMissions varchar NOT NULL, PRIMARY KEY (uuid))", false);
-        query("CREATE TABLE IF NOT EXISTS rankmissions_version (version int(1) NOT NULL)", false);
-        ArrayList<ConcurrentHashMap<String, String>> results = query("SELECT version FROM RankMissions_version", true);
+        query("CREATE TABLE IF NOT EXISTS rankmissions (uuid char(36) NOT NULL, completedMissions varchar(8000) NOT NULL, PRIMARY KEY (uuid));", false);
+        query("CREATE TABLE IF NOT EXISTS rankmissions_queued (uuid char(36) NOT NULL, queuedMissions varchar(8000) NOT NULL, PRIMARY KEY (uuid));", false);
+        query("CREATE TABLE IF NOT EXISTS rankmissions_version (version int(1) NOT NULL);", false);
+        ArrayList<ConcurrentHashMap<String, String>> results = query("SELECT version FROM rankmissions_version;", true);
         // int version;
         if (results == null) {
             query("INSERT INTO rankmissions_version (version) VALUES (1);", false);
@@ -159,6 +159,10 @@ public abstract class SQL {
     }
 
     public void updateQueuedData(String uuid, List<String> queuedMissions) {
+        if (queuedMissions.isEmpty()) {
+            deleteQueuedData(uuid);
+            return;
+        }
         String joinedMissions = StringUtils.join(queuedMissions, ',');
         ArrayList<ConcurrentHashMap<String, String>> data = query(
                 "SELECT queuedMissions FROM rankmissions_queued WHERE uuid = '" + uuid + "';", true);
@@ -189,6 +193,10 @@ public abstract class SQL {
     }
 
     public void updatePlayerData(String uuid, List<String> completedMissions) {
+        if (completedMissions.isEmpty()) {
+            deletePlayerData(uuid);
+            return;
+        }
         String joinedMissions = StringUtils.join(completedMissions, ',');
         ArrayList<ConcurrentHashMap<String, String>> data = query(
                 "SELECT completedMissions FROM rankmissions WHERE uuid = '" + uuid + "';", true);
@@ -210,9 +218,20 @@ public abstract class SQL {
         query("DELETE FROM rankmissions WHERE uuid = '" + uuid + "';", false);
     }
 
+    public void deleteQueuedData(String uuid) {
+        removeFromQueuedCache(uuid);
+        query("DELETE FROM rankmissions_queued WHERE uuid = '" + uuid + "';", false);
+    }
+
     private void removeFromCache(String uuid) {
         if (cache.containsKey(uuid)) {
             cache.remove(uuid);
+        }
+    }
+
+    private void removeFromQueuedCache(String uuid) {
+        if (queuedCache.containsKey(uuid)) {
+            queuedCache.remove(uuid);
         }
     }
 }

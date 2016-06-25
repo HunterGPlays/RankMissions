@@ -2,6 +2,7 @@ package net.terrocidepvp.rankmissions.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ColorCodeUtil {
     private static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
@@ -23,8 +24,6 @@ public class ColorCodeUtil {
     }
 
     public static List<String> translate(List<String> string) {
-        ArrayList<String> temp = new ArrayList<>();
-        string.forEach(str -> temp.add(translate(str)));
-        return temp;
+        return string.stream().map(ColorCodeUtil::translate).collect(Collectors.toCollection(ArrayList::new));
     }
 }
