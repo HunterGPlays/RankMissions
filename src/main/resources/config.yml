@@ -48,10 +48,11 @@ plugin-messages:
     not-in-region:
     - "&cYou can only start this mission in a warzone!"
 
+region-needs-mob-spawning-allow: false
 
 missions:
     # This is the mission name. You can add as many missions as you want.
-    'ExampleMission2':
+    'ExampleMission2':  # Please rename the mission to something else! This is only an example.
         item:
             # Materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
             type: "HAY_BLOCK"
@@ -60,7 +61,7 @@ missions:
             lore:
             - "&7Right click me to"
             - "&7start a rank mission!"
-            # Change to "activate-in-region: []" to disable.
+            # The region must have mob spawning allowed.
             activate-in-region:
             - "warzone"
         settings:
@@ -68,12 +69,9 @@ missions:
             # If true, it would require 'rankmissions.examplemission2' since that's the name you chose for the mission.
             use-permission: false
             repeatable: false
-            # Change to "required-missions: []" to disable.
-            required-missions:
-            - "examplemission1"
-            # Change to "blacklisted-if-mission-complete: []" to disable.
+            required-missions: []
             blacklisted-if-mission-complete:
-            - "examplemission3"
+            - "ExampleMission3"
         entity:
             # Entity types: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html
             mob: "COW"

@@ -35,16 +35,22 @@ public class InteractListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent event) {
+        if (event.isAsynchronous()) {
+            return;
+        }
+
         if (!event.hasItem() ||
                 event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
 
         ItemStack itemStack = event.getItem();
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null) return;
+        if (itemMeta == null
+                || !itemMeta.hasDisplayName()
+                || !itemMeta.hasLore()) {
+            return;
+        }
         String displayName = itemMeta.getDisplayName();
-        if (displayName == null) return;
-        List<String> lore = itemStack.getItemMeta().getLore();
-        if (lore.isEmpty()) return;
+        List<String> lore = itemMeta.getLore();
 
         Player player = event.getPlayer();
         for (Mission mission : plugin.getConfigManager().getMissions()) {
@@ -81,7 +87,7 @@ public class InteractListener implements Listener {
                     && !mission.getItem().getActivateInRegion().isEmpty()) {
                 boolean inRegion = false;
                 for (String regionToCheckAgainst : mission.getItem().getActivateInRegion()) {
-                    if (plugin.getWorldGuardHook().checkIfPlayerInRegion(player, regionToCheckAgainst)) {
+                    if (plugin.getWorldGuardHook().checkIfPlayerInRegion(player, regionToCheckAgainst, plugin.getConfigManager().isRegionNeedsMobSpawningAllow())) {
                         inRegion = true;
                         break;
                     }

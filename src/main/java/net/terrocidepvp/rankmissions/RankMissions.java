@@ -51,10 +51,10 @@ public class RankMissions extends JavaPlugin {
             return;
         }
 
-        int configVersion = 1;
+        int configVersion = 2;
         /*
-         Updated for: N/A
-         Release: v1.0.0
+         Updated for: Mob spawning region check toggle
+         Release: v1.0.5
         */
         if (getConfig().getInt("config-version") != configVersion) {
             getLogger().severe("Your config is outdated!");

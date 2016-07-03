@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class ConfigManager {
     private List<Mission> missions = new LinkedList<>();
     private PluginMessages pluginMessages;
+    private boolean regionNeedsMobSpawningAllow;
 
     public ConfigManager(RankMissions plugin) {
         FileConfiguration config = plugin.getConfig();
@@ -134,6 +135,8 @@ public class ConfigManager {
                 failedToSpawnEntity,
                 diedByNaturalCauses,
                 notInRegion);
+
+        regionNeedsMobSpawningAllow = config.getBoolean("region-needs-mob-spawning-allow");
     }
 
     public List<Mission> getMissions() {
@@ -142,5 +145,9 @@ public class ConfigManager {
 
     public PluginMessages getPluginMessages() {
         return pluginMessages;
+    }
+
+    public boolean isRegionNeedsMobSpawningAllow() {
+        return regionNeedsMobSpawningAllow;
     }
 }
